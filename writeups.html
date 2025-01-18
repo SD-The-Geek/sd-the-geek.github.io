@@ -1,0 +1,124 @@
+<!DOCTYPE HTML>
+<!--
+	Read Only by HTML5 UP
+	html5up.net | @ajlkn
+	Free for personal and commercial use under the CCA 3.0 license (html5up.net/license)
+-->
+<html>
+	<head>
+		<title>Writeups by SD Geek</title>
+		<meta charset="utf-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
+		<link rel="stylesheet" href="assets-2/css/main.css" />
+	</head>
+	<body class="is-preload">
+
+		<!-- Header -->
+			<section id="header">				
+				<nav id="nav">
+					<ul>
+						<li><a href="#lofi" class="active">Lofi</a></li>
+					<!--	<li><a href="#two">More Writeups</a></li>
+						<li><a href="#three">More Writeups</a></li> -->
+					</ul>
+				</nav>
+				<footer>
+					<ul class="icons">
+						<li><a href="https://x.com/sdgameralt" class="icon brands fa-twitter"><span class="label">Twitter</span></a></li>
+						<li><a href="https://instagram.com/sdgeek_real" class="icon brands fa-instagram"><span class="label">Instagram</span></a></li>
+						<li><a href="https://github.com/CyberPro010" class="icon brands fa-github"><span class="label">Github</span></a></li>
+					        <li><a href="https://youtube.com/@SD-Geek" class="icon brands fa-youtube"><span class="label">Youtube</span></a></li>
+					</ul>
+				</footer>
+			</section>
+
+		<!-- Wrapper -->
+			<div id="wrapper">
+
+				<!-- Main -->
+					<div id="main">
+
+						<!-- One -->
+							<section id="lofi">
+								<div class="image main" data-position="center">
+									<img src="images/banner.jpg" alt="" />
+								</div>
+								<div class="container">
+									<header class="major">
+										<h2>Lofi Writeup</h2>
+										<p>TryHackMe(THM) Lofi Room Writeup</a>.</p>
+									</header>
+									<p>So first of all we need to ensure our machine is up and running. <pre>ping 10.10.10.10(machineip) </pre>So after we know it is up and running we will visit it in our browser and if we change the page like 'Chill', 'Sleep' or 'Vibe' we can see that everything remains the same but the page parameter changes the file like: <pre>page=chill.php </pre> also: <pre>page=sleep.php</pre>so we can see that everything remains the same but the page parameter changes so is it loading the file directly ? okay so we can try to load passwd file: <pre>page=/etc/passwd</pre>instead of showing us the file content it says: <pre>HACKKERRR!! HACKER DETECTED. STOP HACKING YOU STINKIN HACKER!</pre>so i guess we can't see these files this easily so let's try to bypass this and trying: <pre>page=../../../etc/passwd</pre> so it worked ! and gave us passwd file content ! so i just thought 'Hmm, what about if i put flag.txt instead of /etc/passwd ?' and it gaves us the flag ! <pre>page=../../../flag.txt </pre> so the flag was: <pre> flag{e4478e0eab69bd642b***************}
+</pre></p>
+								</div>
+							</section>
+<!--
+
+							<section id="two">
+								<div class="container">
+									<h3>Things I Can Do</h3>
+									<p>Integer eu ante ornare amet commetus vestibulum blandit integer in curae ac faucibus integer non. Adipiscing cubilia elementum integer lorem ipsum dolor sit amet.</p>
+									<ul class="feature-icons">
+										<li class="icon solid fa-code">Write all the code</li>
+										<li class="icon solid fa-cubes">Stack small boxes</li>
+										<li class="icon solid fa-book">Read books and stuff</li>
+										<li class="icon solid fa-coffee">Drink much coffee</li>
+										<li class="icon solid fa-bolt">Lightning bolt</li>
+										<li class="icon solid fa-users">Shadow clone technique</li>
+									</ul>
+								</div>
+							</section>
+
+
+							<section id="three">
+								<div class="container">
+									<h3>A Few Accomplishments</h3>
+									<p>Integer eu ante ornare amet commetus vestibulum blandit integer in curae ac faucibus integer non. Adipiscing cubilia elementum integer. Integer eu ante ornare amet commetus.</p>
+									<div class="features">
+										<article>
+											<a href="#" class="image"><img src="images/pic01.jpg" alt="" /></a>
+											<div class="inner">
+												<h4>Possibly broke spacetime</h4>
+												<p>Integer eu ante ornare amet commetus vestibulum blandit integer in curae ac faucibus integer adipiscing ornare amet.</p>
+											</div>
+										</article>
+										<article>
+											<a href="#" class="image"><img src="images/pic02.jpg" alt="" /></a>
+											<div class="inner">
+												<h4>Terraformed a small moon</h4>
+												<p>Integer eu ante ornare amet commetus vestibulum blandit integer in curae ac faucibus integer adipiscing ornare amet.</p>
+											</div>
+										</article>
+										<article>
+											<a href="#" class="image"><img src="images/pic03.jpg" alt="" /></a>
+											<div class="inner">
+												<h4>Snapped dark matter in the wild</h4>
+												<p>Integer eu ante ornare amet commetus vestibulum blandit integer in curae ac faucibus integer adipiscing ornare amet.</p>
+											</div>
+										</article>
+									</div>
+								</div>		
+-->											
+					</div>
+				<!-- Footer -->
+					<section id="footer">
+						<div class="container">
+							<ul class="copyright">
+								<li>&copy; SD Geek 2025 </li><li>Design: <a href="http://html5up.net">HTML5 UP</a></li>
+							</ul>
+						</div>
+					</section>
+
+			</div>
+
+		<!-- Scripts -->
+			<script src="assets-2/js/jquery.min.js"></script>
+			<script src="assets-2/js/jquery.scrollex.min.js"></script>
+			<script src="assets-2/js/jquery.scrolly.min.js"></script>
+			<script src="assets-2/js/browser.min.js"></script>
+			<script src="assets-2/js/breakpoints.min.js"></script>
+			<script src="assets-2/js/util.js"></script>
+			<script src="assets-2/js/main.js"></script>
+
+	</body>
+</html>
